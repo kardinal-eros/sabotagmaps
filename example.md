@@ -385,16 +385,16 @@ bergfex(lng = 13, lat = 47)
 ## $data
 ##        ID                          Name      Staat
 ## 1 1359799                  Sandfeldkopf           
-## 2 1374765                Schwarzseekopf           
-## 3 1376962             Bogenitzenscharte           
-## 4 1376987                       Saukopf           
+## 2 1376987                       Saukopf           
+## 3 1374765                Schwarzseekopf           
+## 4 1376962             Bogenitzenscharte           
 ## 5 1880001 Sandfeldkopf von Innerfragant Österreich
 ## 6 1396583                     Weißensee           
 ##                        Region Hoehe GeoBreite GeoLaenge ID_GeoPunkteTypen
 ## 1 Kärnten/Spittal an der Drau 2920m 46.998797 13.004404              7304
-## 2 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
-## 3 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
-## 4 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
+## 2 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
+## 3 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
+## 4 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
 ## 5                     Kärnten       46.998726 13.004258                29
 ## 6 Kärnten/Spittal an der Drau 2543m 47.007632 12.998010              7514
 ##                                   Typ Level
@@ -476,11 +476,15 @@ o <- occurrences(r)
 
 # configure a background based on the extent of class `Occurrences`
 e <- pretty(extent(o), resolution = "GRID")
+# skip the creation of a relief map
 g <- background(e, reliefmap = FALSE)
 
-# plot background and points
+# plot background
 plot(g)
-points(o)
+# plot coordinates
+plot(o, type = "ASIS", pch = 3, cex = 0.5)
+# plot occupied grid cells only
+plot(o, type = "GRIDCELL", pch = 16, cex = 1.5)
 ```
 
 ![*A map with occurence points and background*.](figure/database2-1.png)

@@ -324,11 +324,15 @@ o <- occurrences(r)
 
 # configure a background based on the extent of class `Occurrences`
 e <- pretty(extent(o), resolution = "GRID")
+# skip the creation of a relief map
 g <- background(e, reliefmap = FALSE)
 
-# plot background and points
+# plot background
 plot(g)
-points(o)
+# plot coordinates
+plot(o, type = "ASIS", pch = 3, cex = 0.5)
+# plot occupied grid cells only
+plot(o, type = "GRIDCELL", pch = 16, cex = 1.5)
 ```
 
 
