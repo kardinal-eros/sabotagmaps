@@ -28,7 +28,7 @@ knit("example.rmd")
 
 Starting the package in an *R* session is easy.
 
-```{r startup}
+```{r startup, message=FALSE}
 library(sabotag)
 ```
 
