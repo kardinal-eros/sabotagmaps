@@ -20,7 +20,7 @@ Getting started
 To work with the sabotag package, if necessary:
 
 * Install [R](http://www.r-project.org/)
-* Install the latest version of package [sabotag](https://github.com/kardinal-eros/sabotag-tools) and [sabotag-data](https://github.com/kardinal-eros/sabotag-data) and its dependencies from [CRAN](https://cran.r-project.org). The example uses the [maps](https://cran.r-project.org/web/packages/maps/index.html). Ensure this package is installed also.
+* Install the latest version of package [sabotag](https://github.com/kardinal-eros/sabotag-tools) and [sabotag-data](https://github.com/kardinal-eros/sabotag-data) and its dependencies from [CRAN](https://cran.r-project.org). The example uses package [maps](https://cran.r-project.org/web/packages/maps/index.html). Ensure this package is installed also.
 
 <!-- To run the basic working example that produced this post: -->
 
@@ -45,7 +45,7 @@ The mapping scheme
 
 The mapping scheme for the recording of the (vascular plant) flora of Central Europe (“Kartierung der Flora Mitteleuropas”) conists of a recangular grid defined in the space of geographic corrdinates and supplemented with a unique id field (Niklfeld 1971).
 
-The basic unit is the so called *Grundfeld* or grid unit. In the package's naming conventions this is called: `GRID`. It measures 10 × 6 degrees in geographic coordinates. The grid unit is further subdivided into four *Quadranten* or grid cells (`GRIDCELL`) in the shape of 5 × 3 degrees. According to this, there is a hierarchy of two resolutions. Grid units can be developed further into sixteenth part. The  *Quadranten* resolution has become traditional for botanists and policy makers and is well known. See Niklfeld (1971) for an early reference. He uses the grid unit for a continental wide map, although the data collected were recorded a finer levels.
+The basic unit is the so called *Grundfeld* or grid unit. In the package's naming conventions this is called: `GRID`. It measures 10 × 6 degrees in geographic coordinates. The grid unit is further subdivided into four *Quadranten* or grid cells (`GRIDCELL`) in the shape of 5 × 3 degrees. According to this, there is a hierarchy of two resolutions. Note, grid units can be developed further into sixteenth part. The  grdi cell resolution (*Quadranten*) has become traditional among botanists and policy makers and is well known. See Niklfeld (1971) for an early reference.
 
 You might for sure know the name of your home grid cell (*Quadrant*), do you? Mine is `8244-1`!
 
@@ -57,12 +57,12 @@ Invoke the console …
 
 
 ```r
-lnglat2gridcell(13, 47)
+lnglat2gridcell(13.04167, 47.775)
 ```
 
 ```
 ## GRIDCELL     GRID     CELL 
-## "8944-3"   "8944"      "3"
+## "8244-1"   "8244"      "1"
 ```
 
 … to find out yours! Simply input your numbers and type: `lnglat2gridcell(YourLongitude, YourLatitude)`.
@@ -115,7 +115,7 @@ Let's start with some dummy extent. First, we define an arbitrary cartographic e
 e <- extent(c(xmin = 12, xmax = 13, ymin = 47, ymax = 48))
 ```
 
-This above line of code can also be written as (type `?extent` for details):
+The above line of code can also be written as (type `?extent` for details):
 
 
 ```r
@@ -176,7 +176,7 @@ head(g)
 ## 6   8040-2 8040    2
 ```
 
-It is easy to plot what we created so far. First we plot the grid along with axes. Then, a polygon representing the initial extent is overlayed. The `pretty` functions finds intervals that perfectly fit the mapping grid scheme. It accept two resolutions: grid units (resolution `GRID`) or grid cells (resolution `CELL`). The `pretty` function is essential in a standard workflow. Beware, the `floragrid` function also accepts argument `resultion` to be passed internally to function `pretty`.
+It is easy to plot what we created so far. First we plot the grid along with axes. Then, a polygon representing the initial extent is overlayed. The `pretty` functions finds intervals that perfectly fit the mapping grid scheme. It accept two resolutions: grid units (resolution `GRID`) or grid cells (resolution `CELL`). The `pretty` function is essential in a standard workflow. Beware, the `floragrid` function also accepts argument `resoltion` to be passed internally to function `pretty`.
 
 
 ```r
@@ -198,7 +198,7 @@ plot(ep, add = TRUE, lwd = 2, border = "red")
 
 ![*Grid of grid cells (black), grid units (blue) and extent (red)*.](figure/gridtestplot-1.png)
 
-Note, `extent2polygon` is a method defined for `"Spatial*"` objects. Polygon versions are helpful in plotting `"Extent"` objects. All classes defined in the *sabotag* package return it's `"Extent"` when called with the `extent` function. Styling of graphics is controlled by arguments `lwd` (line width) and `border` (color of the polygon edges).
+Note, `extent2polygon` is a method defined for `"Spatial*"` objects. Polygon versions of `"Extent"` objects are helpful in plotting. All classes defined in the *sabotag* package return it's `"Extent"` when called with the `extent` function. Styling of graphics is controlled by, for example, by arguments `lwd` (line width) and `border` (color of the polygon edges).
 
 Depending on the coordinate bounds of the initial `"Extent"` object, we expect that a grid of grid cells does not necessarily fit into a grid at the coarser `GRID` resolution. Complicated! No question, there is a solution!
 
@@ -207,7 +207,7 @@ A solution for the creation of map backgrounds
 ----------------------------------------------
 
 
-This task can be achieved without great effort, thanks to some data sets in the *sabotagdata* package. Namely hydrography, topography data sets, as well as high accuracy administrative borders for Austria. Using the extent as above, defining a background objects takes only a single additional line of code.
+This task can be achieved without great effort, thanks to some data sets in the *sabotagdata* package. Namely hydrography, topography data sets, as well as high accuracy administrative borders for Austria. Using the extent above, defining a background objects takes only a single additional line of code.
 
 
 ```r
@@ -385,16 +385,16 @@ bergfex(lng = 13, lat = 47)
 ## $data
 ##        ID                          Name      Staat
 ## 1 1359799                  Sandfeldkopf           
-## 2 1374765                Schwarzseekopf           
-## 3 1376962             Bogenitzenscharte           
-## 4 1376987                       Saukopf           
+## 2 1376962             Bogenitzenscharte           
+## 3 1376987                       Saukopf           
+## 4 1374765                Schwarzseekopf           
 ## 5 1880001 Sandfeldkopf von Innerfragant Österreich
 ## 6 1396583                     Weißensee           
 ##                        Region Hoehe GeoBreite GeoLaenge ID_GeoPunkteTypen
 ## 1 Kärnten/Spittal an der Drau 2920m 46.998797 13.004404              7304
-## 2 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
-## 3 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
-## 4 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
+## 2 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
+## 3 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
+## 4 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
 ## 5                     Kärnten       46.998726 13.004258                29
 ## 6 Kärnten/Spittal an der Drau 2543m 47.007632 12.998010              7514
 ##                                   Typ Level
