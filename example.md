@@ -20,8 +20,7 @@ Getting started
 To work with the sabotag package, if necessary:
 
 * Install [R](http://www.r-project.org/)
-* Install the latest version of package [sabotag](https://github.com/kardinal-eros/sabotag-tools) and [sabotag-data]
-(https://github.com/kardinal-eros/sabotag-data) and its dependencies from [CRAN](https://cran.r-project.org). The example uses the [maps](https://cran.r-project.org/web/packages/maps/index.html). Ensure this package is installed also.
+* Install the latest version of package [sabotag](https://github.com/kardinal-eros/sabotag-tools) and [sabotag-data](https://github.com/kardinal-eros/sabotag-data) and its dependencies from [CRAN](https://cran.r-project.org). The example uses the [maps](https://cran.r-project.org/web/packages/maps/index.html). Ensure this package is installed also.
 
 <!-- To run the basic working example that produced this post: -->
 
@@ -272,6 +271,9 @@ g <- floragrid(e)
 #	two species dummy data in extent
 #	by sampling gird cells
 
+# to random sample reproducible
+set.seed(1234)
+
 i1 <- sample(g$GRIDCELL, 10)
 x1 <- data.frame(taxon = "Genus species",
 	gridcell = i1)
@@ -383,16 +385,16 @@ bergfex(lng = 13, lat = 47)
 ## $data
 ##        ID                          Name      Staat
 ## 1 1359799                  Sandfeldkopf           
-## 2 1376962             Bogenitzenscharte           
-## 3 1376987                       Saukopf           
-## 4 1374765                Schwarzseekopf           
+## 2 1374765                Schwarzseekopf           
+## 3 1376962             Bogenitzenscharte           
+## 4 1376987                       Saukopf           
 ## 5 1880001 Sandfeldkopf von Innerfragant Österreich
 ## 6 1396583                     Weißensee           
 ##                        Region Hoehe GeoBreite GeoLaenge ID_GeoPunkteTypen
 ## 1 Kärnten/Spittal an der Drau 2920m 46.998797 13.004404              7304
-## 2 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
-## 3 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
-## 4 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
+## 2 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
+## 3 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
+## 4 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
 ## 5                     Kärnten       46.998726 13.004258                29
 ## 6 Kärnten/Spittal an der Drau 2543m 47.007632 12.998010              7514
 ##                                   Typ Level

@@ -20,8 +20,7 @@ Getting started
 To work with the sabotag package, if necessary:
 
 * Install [R](http://www.r-project.org/)
-* Install the latest version of package [sabotag](https://github.com/kardinal-eros/sabotag-tools) and [sabotag-data]
-(https://github.com/kardinal-eros/sabotag-data) and its dependencies from [CRAN](https://cran.r-project.org). The example uses the [maps](https://cran.r-project.org/web/packages/maps/index.html). Ensure this package is installed also.
+* Install the latest version of package [sabotag](https://github.com/kardinal-eros/sabotag-tools) and [sabotag-data](https://github.com/kardinal-eros/sabotag-data) and its dependencies from [CRAN](https://cran.r-project.org). The example uses the [maps](https://cran.r-project.org/web/packages/maps/index.html). Ensure this package is installed also.
 
 <!-- To run the basic working example that produced this post: -->
 
@@ -205,6 +204,9 @@ g <- floragrid(e)
 
 #	two species dummy data in extent
 #	by sampling gird cells
+
+# to random sample reproducible
+set.seed(1234)
 
 i1 <- sample(g$GRIDCELL, 10)
 x1 <- data.frame(taxon = "Genus species",
