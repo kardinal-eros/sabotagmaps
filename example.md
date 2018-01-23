@@ -1,7 +1,12 @@
+<!--
+
 ---
 title: The sabotag package
 author: Roland Kaiser
+date: 2018-01-23
 ---
+
+--->
 
 
 Using the sabotag package to plot distribution maps
