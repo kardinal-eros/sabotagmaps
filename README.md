@@ -1,0 +1,1 @@
+See the [examples](https://github.com/kardinal-eros/sabotagmaps/blob/master/example.md)
