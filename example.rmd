@@ -1,0 +1,252 @@
+Using the sabotag package to plot distribution maps
+===================================================
+
+Getting started
+---------------
+
+To work with the sabotag package, if necessary:
+
+* Install [R](http://www.r-project.org/)
+* Install the lastest version of package [sabotag](https://github.com/kardinal-eros/sabotag-tools) and [sabotag-data]
+(https://github.com/kardinal-eros/sabotag-data) and its dependencies from [CRAN](https://cran.r-project.org).
+
+<!-- To run the basic working example that produced this post: -->
+
+<!-- 
+setwd("/Users/roli/Desktop/gist")
+library(knitr)
+knit("example.rmd")
+--> 
+
+Starting a session then is easy.
+
+```{r startup}
+library(sabotag)
+```
+
+
+## Fundamentals about the mapping scheme for the recording of the (vascular plant) flora of Central Europe (“Kartierung der Flora Mitteleuropas”)
+
+
+***How the grid is defined***
+
+
+The basic unit is the so called *Grundfeld* or grid unit. In the package's naming conventions this is called: `GRID`. It measures 10 × 6 degrees in geographic coordinates. This grid is further subdivided into four *Quadranten* or grid cells (`GRIDCELL`) in the shape of 5 × 3 degrees. According to this, there is a certain hierarchy of two resolutions, that can be developed further into sixteenth part. The  *Quadranten* resolution has become traditional for botanists and policy makers and is well known. See Niklfeld (1971) for an early reference. He uses grid unit for a continental wide map, although the dat collected were recored a finer levels.
+
+You might for sure know the name of your home `Quadrant`, do you? Mine is `8244-1`!
+
+
+***Query the grid***
+
+
+Invoke the console …
+
+```{r, basics1}
+lnglat2gridcell(13, 47)
+```
+
+… to find out yours! Simply input your numbers and type: `lnglat2gridcell(YourLongitude, YourLatitude)`.
+
+The grid cells (‘Quadranten’) are almost always the resolution reported for floristic records along with geographic coordinates. If no more detailed data is available, quite often the center coordinate of grid cell is reported. As we saw, any coordinate can be queried for a grid cell, as can be the reverse …
+
+```{r, basics2}
+gridcell2lnglat("8244-1")
+```
+… `gridcell2lnglat()` returns the grid cell mid point, it's center. 
+
+***Grid cell identifier***
+
+The before mentioned hierarchy is also displayed as a unique grid cell identifier. Grid cells are addressed with a separator character, the default is to use a dash (`-`) or minus sign. Many versions thereof exist. Omitting the separator is common in data sets.
+
+Displays the whole thing.
+
+```{r, basics3}
+deparseGridcell("8244-1")
+```
+
+
+## Create mapping grid based on a cartographic section
+
+***Coordinate System***
+
+Coordinates are always geographic coordinates (`CRS("+init=epsg:4326")`).
+
+***Define extent***
+
+Let's start with some dummy data. First, we define an arbitrary cartographic extent that fits our region of interest (e.g. a study area). All fundamental functions in the *sabotag package* build upon `Extent` objects defined in the [raster](https://CRAN.R-project.org/package=raster) package. As a first step, we will create an `Extent` object with coordinate bounds between 12° and 13° longitude and 47° and 48° latitude, respectively. This is as simple as:
+
+```{r, intro1}
+e <- extent(c(xmin = 12, xmax = 13, ymin = 47, ymax = 48))
+```
+
+This line of code can also be written as (type `?extent` for details):
+
+```{r, intro2}
+e <- extent(12, 13, 47, 48)
+```
+
+It also possible to return an extent for any `Spatial*` object to define your region.
+
+```{r, intro3, eval=FALSE}
+extent(YourSpatialObject)
+```
+
+Now let's inspect what the `extent`function returned.
+
+```{r, intro4, echo=TRUE}
+print(e)
+```
+
+Well, that looks as expected.
+
+***Work with extent***
+
+With this `Extent` object at hand we want to find a mapping grid that perfectly fits within the bounding box. The `floragrid` function does this job. Check the help page (`?floragrid`) for details. Objects are of class `SpatialPolygonsDataFrame` and methods for this class apply, e.g. save to ESRI shapefile via `writeOGR`.
+
+```{r, gridtest}
+g <- floragrid(e)
+
+head(g@data)
+```
+
+It is easy to plot what we did so far. First we plot the grid along with axes. Then, a polygon representing the initial extent is overlayed. The `pretty` functions finds intervals that perfectly fit the mapping grid scheme. It accept two resolutions: grid units (resolution `GRID`) or grid cells (resolution `CELL`). We check what the function suggests and test it graphically against a grid in resolution `GRID`. `extent2polygon` is a method defined for `Spatial*` objects. It is helpful in plotting `Extent` objects.
+
+```{r, gridtestplot, fig.cap="Caption"}
+plot(g)
+axis(1) # longtiude
+axis(2) # latitude
+
+plot(extent2polygon(e), add = TRUE, border = 2)
+
+plot(floragrid(e, resolution = "GRID"), add = TRUE, border = 4)
+```
+Note the `floragrid` function reports: `can't calculate proper GRIDCELL … `, because there are four possibilities. We learn also that a grid of grid cells does not necessarily fit in a grid at coarser resolution. Complicated! No question, there is s solution!
+
+## All in one background solution
+
+This task is quite eas, thanks to some data sets in the *sabotagdata* package. Namely hydrography and topography data sets as well as high accuracy administrative borders for Austria. Using the extent as above, defining a background objects takes only one step.
+
+```{r, background, fig.cap="Caption"}
+data(BEV)
+
+e <- extent(12, 13, 47, 48)
+b <- background(e)
+
+class(b)
+names(layers(b))
+
+#	call the plot function
+plot(b)
+```
+
+## More advanced uses
+
+***Configure an extent as plot region***
+```{r, backgroundadvanced1, eval=TRUE}
+#	set extent! somewhere in Salzburg
+e0 <- extent(12.5,14,47,48)
+e <- pretty(e0, resolution = "GRID")
+
+#	version with buffer
+pe <- pretty(e, resolution = "GRID", add = 1, mar = c(1,2,3,4))
+
+#	set background for this version of extent
+b <- background(pe, reliefmap = TRUE, tol = 1)
+```
+
+***Create some dummy occurrences***
+
+```{r, backgroundadvanced2, fig.cap="Caption"}
+g <- floragrid(e)
+
+#	two species dummy data in extent
+#	by sampling gird cells
+
+i1 <- sample(g$GRIDCELL, 10)
+x1 <- data.frame(taxon = "Genus species",
+	gridcell = i1)
+i2 <- sample(g$GRIDCELL, 10)
+x2 <- data.frame(taxon = "Genus species spp. subspecies",
+	gridcell = i2)
+x <- rbind(x1, x2)
+#	make object Spatial*
+coordinates(x) <- gridcell2lnglat(x$gridcell)
+
+o <- occurrences(x)
+```
+
+***Plot the map***
+
+```{r, backgroundadvanced, fig.cap="Caption", eval=TRUE}
+#	plot background
+plot(b)
+
+#	add occurrence points
+points(o[o$taxon == "Genus species", ], pch = 16, cex = 1.5)
+points(o[o$taxon == "Genus species spp. subspecies", ], pch = 1, cex = 1.5)
+
+#	frame depicting extent objects
+plot(extent2polygon(e), add = TRUE)
+plot(extent2polygon(b), add = TRUE, lwd = 3)
+
+#	plot ticks
+ticks(pretty(extent(b), add = -1), "CELL", col = "white")
+ticks(pretty(extent(b), add = -1), coarse = TRUE)
+
+#	style plot margin
+plot(margin(b), add = T, col = "white")
+
+#	label margins
+labelmargin(b)
+```
+
+## Output to pdf to create an atlas
+
+The `pdf` function provides means to plot a single background to be overlayed with individual point maps. In a many page bundle this reduces file size if backgrounds are embedded using a reference, as in Adobe software or LaTex.
+
+
+Geocoding floristic data sets with the sabotag package
+======================================================
+
+
+```{r, geocoding1}
+x <- data.frame(accuracy = 10, x = 10:16, y = 47)
+coordinates(x) <- ~x+y
+proj4string(x) <- CRS("+init=epsg:4326")
+```
+
+```{r, geocoding2, message=FALSE}
+geocode.austria(x)
+```
+
+```{r, geocoding3}
+safapi(13, 47, c("geb", "q"), "csv")
+```
+
+```{r, geocoding4}
+elevation(lng = 13, lat = 47, sp = FALSE)
+```
+
+```{r, geocoding5}
+bergfex(lng = 13, lat = 47, sp = FALSE)
+```
+
+### Access Zobodat specimens
+
+```{r, database1, fig.cap = "Caption", eval=TRUE}
+r <- zobodat("Poa", "pratensis")
+
+require(maps)
+map(region ="Austria")
+points(r)
+r$taxon <- paste(r$Gattung, r$Art)
+o <- occurrences(r)
+
+g <- background(r, reliefmap = FALSE)
+plot(g)
+points(o)
+```
+
+## References
+
+Niklfeld, H. (1978): Grundfeldschlüssel für die Kartierung der Flora Mitteleuropas, südlicher Teil (= Zentralstelle für Florenkartierung, Inst. Bot. Univ. Wien). Wien.
