@@ -254,6 +254,9 @@ The `pdf` functions for classes `"Background"`and `"Occurrences"` provides means
 Geo-coding floristic data sets with the sabotag package
 ======================================================
 
+***Option 1, datsets in sabotag-data***
+
+Simulate dummy data.
 
 ```{r, geocoding1}
 x <- data.frame(accuracy = 10, x = 10:16, y = 47)
@@ -261,24 +264,34 @@ coordinates(x) <- ~x+y
 proj4string(x) <- CRS("+init=epsg:4326")
 ```
 
+Perform query.
+
 ```{r, geocoding2, message=FALSE}
 geocode.austria(x)
 ```
 
+***Option 2, Standortsanalyse API***
+
 ```{r, geocoding3}
-safapi(13, 47, c("geb", "q"), "csv")
+safapi(13, 47, c("gebirge", "msm"), format = "csv")
 ```
 
-```{r, geocoding4}
-elevation(lng = 13, lat = 47, sp = FALSE)
-```
+***Option 2, Bergfex API***
 
 ```{r, geocoding5}
-bergfex(lng = 13, lat = 47, sp = FALSE)
+bergfex(lng = 13, lat = 47)
 ```
 
+***Option 2, Openstreetmap API***
+
 ```{r, geocoding6}
-nominatim(lng = 13, lat = 47, sp = FALSE)
+nominatim(lng = 13, lat = 47)
+```
+
+***Openelevation API***
+
+```{r, geocoding4}
+elevation(lng = 13, lat = 47)
 ```
 
 
@@ -288,7 +301,7 @@ Access Zobodat specimens
 It is straight forward to query the *ZOBODAT* data base and plot maps.
 
 
-```{r, database1, fig.cap = "*A simple out of the box map with occurence points*."}
+```{r, database1, fig.cap = "*A simple out of the box map with occurence points*.", message=FALSE}
 # perform query
 r <- zobodat("Poa", "pratensis")
 

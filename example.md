@@ -323,6 +323,9 @@ The `pdf` functions for classes `"Background"`and `"Occurrences"` provides means
 Geo-coding floristic data sets with the sabotag package
 ======================================================
 
+***Option 1, datsets in sabotag-data***
+
+Simulate dummy data.
 
 
 ```r
@@ -330,6 +333,8 @@ x <- data.frame(accuracy = 10, x = 10:16, y = 47)
 coordinates(x) <- ~x+y
 proj4string(x) <- CRS("+init=epsg:4326")
 ```
+
+Perform query.
 
 
 ```r
@@ -355,45 +360,39 @@ geocode.austria(x)
 ## 7       Österreich, Steiermark, Bezirk Südoststeiermark, Fehring
 ```
 
-
-```r
-safapi(13, 47, c("geb", "q"), "csv")
-```
-
-```
-##    x  y               name quadrant
-## 1 13 47 Sonnblick - Böseck   9043-2
-```
+***Option 2, Standortsanalyse API***
 
 
 ```r
-elevation(lng = 13, lat = 47, sp = FALSE)
+safapi(13, 47, c("gebirge", "msm"), format = "csv")
 ```
 
 ```
-##   latitude elevation longitude
-## 1       13       299        13
+##    x  y               name      msm
+## 1 13 47 Sonnblick - Böseck 2720.786
 ```
+
+***Option 2, Bergfex API***
 
 
 ```r
-bergfex(lng = 13, lat = 47, sp = FALSE)
+bergfex(lng = 13, lat = 47)
 ```
 
 ```
 ## $data
 ##        ID                          Name      Staat
 ## 1 1359799                  Sandfeldkopf           
-## 2 1374765                Schwarzseekopf           
-## 3 1376962             Bogenitzenscharte           
-## 4 1376987                       Saukopf           
+## 2 1376962             Bogenitzenscharte           
+## 3 1376987                       Saukopf           
+## 4 1374765                Schwarzseekopf           
 ## 5 1880001 Sandfeldkopf von Innerfragant Österreich
 ## 6 1396583                     Weißensee           
 ##                        Region Hoehe GeoBreite GeoLaenge ID_GeoPunkteTypen
 ## 1 Kärnten/Spittal an der Drau 2920m 46.998797 13.004404              7304
-## 2 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
-## 3 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
-## 4 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
+## 2 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
+## 3 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
+## 4 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
 ## 5                     Kärnten       46.998726 13.004258                29
 ## 6 Kärnten/Spittal an der Drau 2543m 47.007632 12.998010              7514
 ##                                   Typ Level
@@ -419,14 +418,28 @@ bergfex(lng = 13, lat = 47, sp = FALSE)
 ## [1] 13
 ```
 
+***Option 2, Openstreetmap API***
+
 
 ```r
-nominatim(lng = 13, lat = 47, sp = FALSE)
+nominatim(lng = 13, lat = 47)
 ```
 
 ```
 ##           ST      BL                  PB       PG
 ## 1 Österreich Kärnten Spittal an der Drau Flattach
+```
+
+***Openelevation API***
+
+
+```r
+elevation(lng = 13, lat = 47)
+```
+
+```
+##   latitude elevation longitude
+## 1       13       299        13
 ```
 
 
@@ -440,13 +453,7 @@ It is straight forward to query the *ZOBODAT* data base and plot maps.
 ```r
 # perform query
 r <- zobodat("Poa", "pratensis")
-```
 
-```
-## waiting for server, be patient
-```
-
-```r
 # plot
 require(maps)
 # low resoltion map of Austria
