@@ -43,9 +43,9 @@ The mapping scheme
 
 ***Mapping grid definition***
 
-The mapping scheme for the recording of the (vascular plant) flora of Central Europe (“Kartierung der Flora Mitteleuropas”) conists of a recangular grid defined in the space of geographic corrdinates and supplemented with a unique id field (Niklfeld 1971).
+The mapping scheme for the recording of the (vascular plant) flora of Central Europe (“Kartierung der Flora Mitteleuropas”) conists of a recangular grid defined in the space of geographic coordinates and supplemented with a unique id field (Niklfeld 1971).
 
-The basic unit is the so called *Grundfeld* or grid unit. In the package's naming conventions this is called: `GRID`. It measures 10 × 6 degrees in geographic coordinates. The grid unit is further subdivided into four *Quadranten* or grid cells (`GRIDCELL`) in the shape of 5 × 3 degrees. According to this, there is a hierarchy of two resolutions. Note, grid units can be developed further into sixteenth part. The  grdi cell resolution (*Quadranten*) has become traditional among botanists and policy makers and is well known. See Niklfeld (1971) for an early reference.
+The basic unit is the so called *Grundfeld* or grid unit. In the package's naming conventions this is called: `GRID`. It measures 10 × 6 degrees in geographic coordinates. The grid unit is further subdivided into four *Quadranten* or grid cells (`GRIDCELL`) in the shape of 5 × 3 degrees. According to this, there is a hierarchy of two resolutions. Note, grid units can be developed further into sixteenth part. The grid cell resolution (*Quadranten*) has become traditional among botanists and policy makers and is well known. See Niklfeld (1971) for an early reference.
 
 You might for sure know the name of your home grid cell (*Quadrant*), do you? Mine is `8244-1`!
 
@@ -176,7 +176,7 @@ head(g)
 ## 6   8040-2 8040    2
 ```
 
-It is easy to plot what we created so far. First we plot the grid along with axes. Then, a polygon representing the initial extent is overlayed. The `pretty` functions finds intervals that perfectly fit the mapping grid scheme. It accept two resolutions: grid units (resolution `GRID`) or grid cells (resolution `CELL`). The `pretty` function is essential in a standard workflow. Beware, the `floragrid` function also accepts argument `resoltion` to be passed internally to function `pretty`.
+It is easy to plot what we created so far. First we plot the grid along with axes. Then, a polygon representing the initial extent is overlayed. The `pretty` function finds intervals that perfectly fit the mapping grid scheme. It accepts two resolutions: grid units (resolution `GRID`) or grid cells (resolution `CELL`). The `pretty` function is essential in a standard workflow. Beware, the `floragrid` function also accepts argument `resoltion` to be passed internally to function `pretty`.
 
 
 ```r
@@ -385,16 +385,16 @@ bergfex(lng = 13, lat = 47)
 ## $data
 ##        ID                          Name      Staat
 ## 1 1359799                  Sandfeldkopf           
-## 2 1376962             Bogenitzenscharte           
-## 3 1376987                       Saukopf           
-## 4 1374765                Schwarzseekopf           
+## 2 1374765                Schwarzseekopf           
+## 3 1376962             Bogenitzenscharte           
+## 4 1376987                       Saukopf           
 ## 5 1880001 Sandfeldkopf von Innerfragant Österreich
 ## 6 1396583                     Weißensee           
 ##                        Region Hoehe GeoBreite GeoLaenge ID_GeoPunkteTypen
 ## 1 Kärnten/Spittal an der Drau 2920m 46.998797 13.004404              7304
-## 2 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
-## 3 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
-## 4 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
+## 2 Kärnten/Spittal an der Drau 2825m 47.007982 13.004767              7305
+## 3 Kärnten/Spittal an der Drau 2665m 46.992739 12.996400              7305
+## 4 Kärnten/Spittal an der Drau 2786m 46.996248 13.008342              7305
 ## 5                     Kärnten       46.998726 13.004258                29
 ## 6 Kärnten/Spittal an der Drau 2543m 47.007632 12.998010              7514
 ##                                   Typ Level
